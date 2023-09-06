@@ -72,7 +72,7 @@ interface Controllers {
     }
 }
 
-module.exports = function (app: Express, name: string, middleware: Middleware, controllers: Controllers) {
+export = function (app: Express, name: string, middleware: Middleware, controllers: Controllers) {
     const middlewares = [middleware.exposeUid, middleware.canViewUsers];
     const accountMiddlewares = [
         middleware.exposeUid,
