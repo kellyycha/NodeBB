@@ -1,4 +1,4 @@
-import { Express, RequestHandler} from 'express';
+import { Express, RequestHandler } from 'express';
 import helpers from './helpers';
 
 const { setupPageRoute } = helpers;
@@ -72,7 +72,7 @@ interface Controllers {
     }
 }
 
-module.exports = function (app: Express, name: string, middleware: Middleware, controllers: Controllers) {
+exports = function (app: Express, name: string, middleware: Middleware, controllers: Controllers) {
     const middlewares = [middleware.exposeUid, middleware.canViewUsers];
     const accountMiddlewares = [
         middleware.exposeUid,

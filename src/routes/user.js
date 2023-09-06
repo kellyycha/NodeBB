@@ -1,10 +1,11 @@
-'use strict';
-
-const helpers = require('./helpers');
-
-const { setupPageRoute } = helpers;
-
-module.exports = function (app, name, middleware, controllers) {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const helpers_1 = __importDefault(require("./helpers"));
+const { setupPageRoute } = helpers_1.default;
+exports = function (app, name, middleware, controllers) {
     const middlewares = [middleware.exposeUid, middleware.canViewUsers];
     const accountMiddlewares = [
         middleware.exposeUid,
@@ -12,21 +13,17 @@ module.exports = function (app, name, middleware, controllers) {
         middleware.canViewUsers,
         middleware.checkAccountPermissions,
     ];
-
     setupPageRoute(app, '/me', [], middleware.redirectMeToUserslug);
     setupPageRoute(app, '/me/*', [], middleware.redirectMeToUserslug);
     setupPageRoute(app, '/uid/:uid*', [], middleware.redirectUidToUserslug);
-
     setupPageRoute(app, `/${name}/:userslug`, middlewares, controllers.accounts.profile.get);
     setupPageRoute(app, `/${name}/:userslug/following`, middlewares, controllers.accounts.follow.getFollowing);
     setupPageRoute(app, `/${name}/:userslug/followers`, middlewares, controllers.accounts.follow.getFollowers);
-
     setupPageRoute(app, `/${name}/:userslug/posts`, middlewares, controllers.accounts.posts.getPosts);
     setupPageRoute(app, `/${name}/:userslug/topics`, middlewares, controllers.accounts.posts.getTopics);
     setupPageRoute(app, `/${name}/:userslug/best`, middlewares, controllers.accounts.posts.getBestPosts);
     setupPageRoute(app, `/${name}/:userslug/controversial`, middlewares, controllers.accounts.posts.getControversialPosts);
     setupPageRoute(app, `/${name}/:userslug/groups`, middlewares, controllers.accounts.groups.get);
-
     setupPageRoute(app, `/${name}/:userslug/categories`, accountMiddlewares, controllers.accounts.categories.get);
     setupPageRoute(app, `/${name}/:userslug/bookmarks`, accountMiddlewares, controllers.accounts.posts.getBookmarks);
     setupPageRoute(app, `/${name}/:userslug/watched`, accountMiddlewares, controllers.accounts.posts.getWatchedTopics);
@@ -46,7 +43,6 @@ module.exports = function (app, name, middleware, controllers) {
     setupPageRoute(app, `/${name}/:userslug/consent`, accountMiddlewares, controllers.accounts.consent.get);
     setupPageRoute(app, `/${name}/:userslug/blocks`, accountMiddlewares, controllers.accounts.blocks.getBlocks);
     setupPageRoute(app, `/${name}/:userslug/sessions`, accountMiddlewares, controllers.accounts.sessions.get);
-
     setupPageRoute(app, '/notifications', [middleware.ensureLoggedIn], controllers.accounts.notifications.get);
     setupPageRoute(app, `/${name}/:userslug/chats/:roomid?`, middlewares, controllers.accounts.chats.get);
     setupPageRoute(app, '/chats/:roomid?', [middleware.ensureLoggedIn], controllers.accounts.chats.redirectToChat);
