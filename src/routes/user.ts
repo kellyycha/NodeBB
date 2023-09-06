@@ -1,9 +1,78 @@
-import { Express } from 'express';
+import { Express, RequestHandler} from 'express';
 import helpers from './helpers';
 
 const { setupPageRoute } = helpers;
 
-module.exports = function (app: Express, name: string, middleware, controllers) {
+interface Middleware {
+    exposeUid: RequestHandler;
+    canViewUsers: RequestHandler;
+    ensureLoggedIn: RequestHandler;
+    checkAccountPermissions: RequestHandler;
+    redirectMeToUserslug: RequestHandler;
+    redirectUidToUserslug: RequestHandler;
+}
+
+interface Controllers {
+    accounts:{
+        profile: {
+            get: RequestHandler;
+        };
+        follow: {
+            getFollowing: RequestHandler;
+            getFollowers: RequestHandler;
+        };
+        posts: {
+            getPosts: RequestHandler;
+            getTopics: RequestHandler;
+            getBestPosts: RequestHandler;
+            getControversialPosts: RequestHandler;
+            getBookmarks: RequestHandler;
+            getWatchedTopics: RequestHandler;
+            getIgnoredTopics: RequestHandler;
+            getUpVotedPosts: RequestHandler;
+            getDownVotedPosts: RequestHandler;
+        };
+        groups: {
+            get: RequestHandler;
+        };
+        categories: {
+            get: RequestHandler;
+        };
+        edit: {
+            get: RequestHandler;
+            username: RequestHandler;
+            email: RequestHandler;
+            password: RequestHandler;
+        };
+        info: {
+            get: RequestHandler;
+        };
+        settings: {
+            get: RequestHandler;
+        };
+        uploads: {
+            get: RequestHandler;
+        };
+        consent: {
+            get: RequestHandler;
+        };
+        blocks: {
+            getBlocks: RequestHandler;
+        };
+        sessions: {
+            get: RequestHandler;
+        };
+        notifications: {
+            get: RequestHandler;
+        };
+        chats: {
+            get: RequestHandler;
+            redirectToChat: RequestHandler;
+        };
+    }
+}
+
+module.exports = function (app: Express, name: string, middleware: Middleware, controllers: Controllers) {
     const middlewares = [middleware.exposeUid, middleware.canViewUsers];
     const accountMiddlewares = [
         middleware.exposeUid,
