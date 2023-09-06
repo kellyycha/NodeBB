@@ -4,12 +4,12 @@ import helpers from './helpers';
 const { setupPageRoute } = helpers;
 
 interface Middleware {
-    exposeUid: any;
-    canViewUsers: any;
-    ensureLoggedIn: any;
-    checkAccountPermissions: any;
-    redirectMeToUserslug: any;
-    redirectUidToUserslug: any;
+    exposeUid: RequestHandler;
+    canViewUsers: RequestHandler;
+    ensureLoggedIn: RequestHandler;
+    checkAccountPermissions: RequestHandler;
+    redirectMeToUserslug: RequestHandler;
+    redirectUidToUserslug: RequestHandler;
 }
 
 interface Controllers {
@@ -67,7 +67,7 @@ interface Controllers {
         };
         chats: {
             get: RequestHandler;
-            redirectToChat: any;
+            redirectToChat: RequestHandler;
         };
     }
 }
