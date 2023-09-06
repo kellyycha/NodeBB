@@ -1,10 +1,79 @@
-'use strict';
-
-const helpers = require('./helpers');
+import { Express, RequestHandler, Request, Response } from 'express';
+import helpers from './helpers';
 
 const { setupPageRoute } = helpers;
 
-module.exports = function (app, name, middleware, controllers) {
+interface Middleware {
+    // what type?
+    exposeUid: any;
+    canViewUsers: any;
+    ensureLoggedIn: any;
+    checkAccountPermissions: any;
+    redirectMeToUserslug: any;
+    redirectUidToUserslug: any;
+}
+
+interface Controllers {
+    accounts:{
+        profile: {
+            get: RequestHandler;
+        };
+        follow: {
+            getFollowing: RequestHandler;
+            getFollowers: RequestHandler;
+        };
+        posts: {
+            getPosts: RequestHandler;
+            getTopics: RequestHandler;
+            getBestPosts: RequestHandler;
+            getControversialPosts: RequestHandler;
+            getBookmarks: RequestHandler;
+            getWatchedTopics: RequestHandler;
+            getIgnoredTopics: RequestHandler;
+            getUpVotedPosts: RequestHandler;
+            getDownVotedPosts: RequestHandler;
+        };
+        groups: {
+            get: RequestHandler;
+        };
+        categories: {
+            get: RequestHandler;
+        };
+        edit: {
+            get: RequestHandler;
+            username: string;
+            email: string;
+            password: string;
+        };
+        info: {
+            get: RequestHandler;
+        };
+        settings: {
+            get: RequestHandler;
+        };
+        uploads: {
+            get: RequestHandler;
+        };
+        consent: {
+            get: RequestHandler;
+        };
+        blocks: {
+            getBlocks: RequestHandler;
+        };
+        sessions: {
+            get: RequestHandler;
+        };
+        notifications: {
+            get: RequestHandler;
+        };
+        chats: {
+            get: RequestHandler;
+            redirectToChat: any;
+        };
+    }
+}
+
+exports = function (app: any, name: string, middleware: any, controllers: any) {
     const middlewares = [middleware.exposeUid, middleware.canViewUsers];
     const accountMiddlewares = [
         middleware.exposeUid,
@@ -37,7 +106,8 @@ module.exports = function (app, name, middleware, controllers) {
     setupPageRoute(app, `/${name}/:userslug/edit/username`, accountMiddlewares, controllers.accounts.edit.username);
     setupPageRoute(app, `/${name}/:userslug/edit/email`, accountMiddlewares, controllers.accounts.edit.email);
     setupPageRoute(app, `/${name}/:userslug/edit/password`, accountMiddlewares, controllers.accounts.edit.password);
-    app.use('/.well-known/change-password', (req, res) => {
+
+    app.use('/.well-known/change-password', (req: Request, res: Response) => {
         res.redirect('/me/edit/password');
     });
     setupPageRoute(app, `/${name}/:userslug/info`, accountMiddlewares, controllers.accounts.info.get);
