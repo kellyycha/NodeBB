@@ -1,8 +1,9 @@
+import { Express } from 'express';
 import helpers from './helpers';
 
 const { setupPageRoute } = helpers;
 
-module.exports = function (app, name: string, middleware, controllers) {
+module.exports = function (app: Express, name: string, middleware, controllers) {
     const middlewares = [middleware.exposeUid, middleware.canViewUsers];
     const accountMiddlewares = [
         middleware.exposeUid,
