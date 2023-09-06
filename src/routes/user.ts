@@ -1,4 +1,4 @@
-import { Express, RequestHandler } from 'express';
+import { Express, RequestHandler, Request, Response } from 'express';
 import helpers from './helpers';
 
 const { setupPageRoute } = helpers;
@@ -40,9 +40,9 @@ interface Controllers {
         };
         edit: {
             get: RequestHandler;
-            username: RequestHandler;
-            email: RequestHandler;
-            password: RequestHandler;
+            username: string;
+            email: string;
+            password: string;
         };
         info: {
             get: RequestHandler;
@@ -105,7 +105,8 @@ exports = function (app: Express, name: string, middleware: Middleware, controll
     setupPageRoute(app, `/${name}/:userslug/edit/username`, accountMiddlewares, controllers.accounts.edit.username);
     setupPageRoute(app, `/${name}/:userslug/edit/email`, accountMiddlewares, controllers.accounts.edit.email);
     setupPageRoute(app, `/${name}/:userslug/edit/password`, accountMiddlewares, controllers.accounts.edit.password);
-    app.use('/.well-known/change-password', (req, res) => {
+
+    app.use('/.well-known/change-password', (req: Request, res: Response) => {
         res.redirect('/me/edit/password');
     });
     setupPageRoute(app, `/${name}/:userslug/info`, accountMiddlewares, controllers.accounts.info.get);
