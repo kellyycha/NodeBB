@@ -1,10 +1,9 @@
-'use strict';
-
-const helpers = require('./helpers');
+import { Express, RequestHandler, Request, Response } from 'express';
+import helpers from './helpers';
 
 const { setupPageRoute } = helpers;
 
-module.exports = function (app, name, middleware, controllers) {
+module.exports = function (app: Express, name: string, middleware, controllers) {
     const middlewares = [middleware.exposeUid, middleware.canViewUsers];
     const accountMiddlewares = [
         middleware.exposeUid,
@@ -37,7 +36,7 @@ module.exports = function (app, name, middleware, controllers) {
     setupPageRoute(app, `/${name}/:userslug/edit/username`, accountMiddlewares, controllers.accounts.edit.username);
     setupPageRoute(app, `/${name}/:userslug/edit/email`, accountMiddlewares, controllers.accounts.edit.email);
     setupPageRoute(app, `/${name}/:userslug/edit/password`, accountMiddlewares, controllers.accounts.edit.password);
-    app.use('/.well-known/change-password', (req, res) => {
+    app.use('/.well-known/change-password', (req: Request, res: Response) => {
         res.redirect('/me/edit/password');
     });
     setupPageRoute(app, `/${name}/:userslug/info`, accountMiddlewares, controllers.accounts.info.get);
